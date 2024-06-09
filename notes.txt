@@ -1,0 +1,49 @@
+========== Go (Golang) ==========
+1. GO is compiled language
+ execution speed - (compiled language is faster then any interpreted language)
+ compilation speed - 
+ - go is natively compiled language - code directly compiled to machine code
+ 
+ - every go program start with main.go file from main function
+
+2. Go is Strongly Typed programming language
+ - data type checking, have to mention variable data type
+ -- Go enforces strong and static typing, meaning variables can only have a single type. 
+    A string variable like "hello world" can not be changed to an int, such as the number 3
+
+3. Build in Concurrency (Go-routine)
+4. Garbage collection
+
+== Data Type ==
+= bool => true, false
+= string
+= int  int8  int16  int32  int64
+= uint uint8 uint16 uint32 uint64 uintptr (non-negative number)
+= byte // alias for uint8
+= rune // alias for int32
+     // represents a Unicode code point
+= float32 float64
+= complex64 complex128
+
+== Data Type (in print)==
+%v - any value at place
+%T -> print data type of value
+%d -> int
+%f, %g -> float (%.2f , it round off to 2 decimal place)
+%t -> bool
+%q, %s -> string
+%e -> scientific notation of value
+
+=== data size represented in bits (float32, float64, int32)
+
+========== packages & modules ==========
+packages = folder that has collection of file
+module = collection of packages(folder) (when creating project we are creating new module)
+
+================= commands ===============
+1. go mod init {module name} ==== init a module file go.mod (start a go project)
+2. go run . (if main file is in current dir), go run main.go (location of main.go file)
+3. go run main.go = run go main file
+4. go mod tidy = adds any missing modules necessary to build the current module's packages and dependencies,
+                and it removes unused modules that don't provide any relevant packages
+5. go get {packages} = to install any package
