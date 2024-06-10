@@ -1,7 +1,9 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"strconv"
 )
 
 func sum(num1 int, num2 int) int {
@@ -143,6 +145,16 @@ func getExpenses(e expenses) {
 	fmt.Println(em, ok)
 }
 
+// === VARIADIC function ===
+func concatString(strs ...string) string {
+	// strs is just a slice of strings
+	final := ""
+	for i := 0; i < len(strs); i++ {
+		final += strs[i]
+	}
+	return final
+}
+
 func main() {
 	// ====== printing ========
 	fmt.Print("print in single line =========")
@@ -239,4 +251,92 @@ func main() {
 	}
 	fmt.Print("sms1", sms1)
 	getExpenses(sms1)
+
+	// ======== Errors handling ============
+	/*
+		Go programs express errors with error values. An Error is any type that implements the simple built-in error interface:
+		type error interface {
+		    Error() string
+		}
+	*/
+	// Because errors are just interfaces, you can build your own custom types that
+	// implement the error interfaceBecause errors are just interfaces, you can build your
+	// own custom types that implement the error interface
+	i, err := strconv.Atoi("42b")
+	if err != nil {
+		fmt.Println("couldn't convert:", err)
+	}
+	fmt.Println(i)
+
+	var err1 error = errors.New("something went wrong")
+	fmt.Println(err1)
+
+	fmt.Println("======== Loop =========")
+	/*
+		for INITIAL; CONDITION; UPDATE {
+		}
+
+		// loop continue
+		for INITIAL; ; UPDATE {
+		}
+
+		// go do not have d0-while, this for loop run until condition is true
+		for CONDITION {
+		}
+
+	*/
+	for i := 0; i < 10; i++ {
+		if i%2 == 0 {
+			continue
+		}
+		fmt.Print(i, " ")
+	}
+	fmt.Println()
+	for i := 0; i < 10; i++ {
+		if i == 5 {
+			break
+		}
+		fmt.Print(i, " ")
+	}
+	fmt.Println()
+	// ======== Array and slice =========
+	/* Array
+	1. fixed in size
+	*/
+	var myInts [10]int
+	fmt.Println(myInts, len(myInts))
+
+	even := [5]int{0, 2, 4, 6, 8}
+	fmt.Println(even)
+
+	names := [3]string{"Ajay", "Aman", "Abhi"}
+	fmt.Println(names)
+
+	/* Slices
+	1. Dynamic in size - A slice is a dynamically-sized, flexible view of the elements of an array.
+	2. len = return the number of element present in current slice
+	3. cap = return the number of element can be add before resigning that slice into new
+	*/
+	var odd = []int{}
+	fmt.Println("size ", len(odd), " cap ", cap(odd))
+	odd = append(odd, 13)
+	odd = append(odd, 23)
+	odd = append(odd, 3)
+	odd = append(odd, 33)
+	fmt.Println("size ", len(odd), " cap ", cap(odd))
+	fmt.Println(odd)
+
+	/* ========== Make ============
+	MAKE : Most of the time we don't need to think about the underlying array of a slice.
+	We can create a new slice using the make function */
+
+	mySlice := make([]int, 5, 10) // int type, len = 5, cap = 10
+	fmt.Println(mySlice, len(mySlice), cap(mySlice))
+
+	// === VARIADIC function ===
+	fmt.Println(concatString("hello", "testing", "concat"))
+
+	// === SPREAD Operator === work only for SLICE not ARRAY
+	names2 := []string{"Ajay", "Aman", "Abhi"}
+	fmt.Println(concatString(names2...))
 }
