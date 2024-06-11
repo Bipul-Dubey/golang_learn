@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 func sum(num1 int, num2 int) int {
@@ -153,6 +154,36 @@ func concatString(strs ...string) string {
 		final += strs[i]
 	}
 	return final
+}
+
+func add(m map[string]map[string]int, path, country string) {
+	mm, ok := m[path]
+	if !ok {
+		mm = make(map[string]int)
+		m[path] = mm
+	}
+	mm[country]++
+}
+
+func countDistinctWords(messages []string) int {
+	var count int
+	msgs := []string{}
+	for _, message := range messages {
+		msgs = append(msgs, strings.Fields(message)...)
+	}
+
+	countMap := map[string]int{}
+	for _, v := range msgs {
+		ele, ok := countMap[v]
+		fmt.Println(ele, ok)
+		if ok {
+			continue
+		} else {
+			countMap[strings.ToLower(v)]++
+			count++
+		}
+	}
+	return count
 }
 
 func main() {
@@ -339,4 +370,103 @@ func main() {
 	// === SPREAD Operator === work only for SLICE not ARRAY
 	names2 := []string{"Ajay", "Aman", "Abhi"}
 	fmt.Println(concatString(names2...))
+
+	// ==== SLICE of SLICE =====
+	row := 7
+	cols := 7
+	mySlice2 := make([][]int, 0)
+	for i := 0; i < row; i++ {
+		row := make([]int, 0)
+		for j := 0; j < cols; j++ {
+			row = append(row, i*j)
+		}
+		mySlice2 = append(mySlice2, row)
+	}
+
+	fmt.Println(mySlice2)
+
+	/*
+		The append() function changes the underlying array of its parameter AND returns a new slice.
+		This means that using append() on anything other than itself is usually a BAD idea.
+
+		someSlice = append(otherSlice, element)
+
+		Always append to same slice
+	*/
+
+	/*
+		RANGE
+		Go provides syntactic sugar to iterate easily over elements of a slice:
+		for INDEX, ELEMENT := range SLICE {
+		}
+	*/
+
+	for INDEX, ELEMENT := range mySlice2 {
+		fmt.Println("index: ", INDEX, " element:", ELEMENT)
+	}
+
+	// =============== MAP =============
+	ages := make(map[string]int)
+	ages["John"] = 21
+	fmt.Println(ages, ages["John"])
+
+	ages2 := map[string]int{
+		"vicky": 23,
+		"vijay": 24,
+	}
+	fmt.Println("ages2", ages2)
+
+	newMap := map[string]any{
+		"string": "string data",
+		"int":    34,
+		"bool":   true,
+	}
+
+	fmt.Println(newMap)
+	// set data
+	newMap["int"] = 300
+	// get a key
+	fmt.Println("get data", newMap["int"])
+	//  delete a key
+	delete(newMap, "int")
+	fmt.Println(newMap)
+	// check if a key exists or not
+	ele, ok := newMap["string"]
+	fmt.Println("ele: ", ele, " exists: ", ok)
+	ele1, ok := newMap["int"]
+	fmt.Println("ele: ", ele1, " exists: ", ok)
+
+	/*
+		As mentioned earlier, map keys may be of any type that is comparable.
+		The language spec defines this precisely, but in short,
+		comparable types are boolean, numeric, string, pointer, channel, and interface types, and structs or arrays
+		that contain only those types.
+		Notably absent from the list are slices, maps, and functions;
+		these types cannot be compared using ==, and may not be used as map keys.
+	*/
+
+	// Instead of using nested map use struct as key
+	hits := make(map[string]map[string]int)
+	// it get panic - we have to check if that key is exist or not
+	add(hits, "/doc/", "au")
+
+	// struct as key
+	type Key struct {
+		Path, Country string
+	}
+	hits2 := make(map[Key]int)
+	hits2[Key{"/", "vn"}]++
+
+	fmt.Println(hits2)
+
+	// count distinct word
+	messages := []string{"Hello world", "hello there", "General Kenobi"}
+	count := countDistinctWords(messages)
+	fmt.Println(count)
+
+	fmt.Println("========== Advance Function ============")
+	fmt.Println("========== FIRST CLASS AND HIGHER ORDER FUNCTIONS ============")
+	// FIRST CLASS AND HIGHER ORDER FUNCTIONS -> callback function / function as data
+	// FIRST CLASS -> A programming language is said to have "first-class functions" when functions in that language are treated like any other variable.
+	// HIGHER ORDER FUNCTIONS -> A function that returns a function or accepts a function as input.
 }
