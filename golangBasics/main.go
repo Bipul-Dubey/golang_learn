@@ -186,6 +186,26 @@ func countDistinctWords(messages []string) int {
 	return count
 }
 
+func multiply(x, y int) int {
+	return x * y
+}
+
+func substract(x, y int) int {
+	return x - y
+}
+
+// first class function
+func maths(operation func(int, int) int, x, y int) int {
+	return operation(x, y)
+}
+
+// currying
+func selfMath(mathFunc func(int, int) int) func(int) int {
+	return func(x int) int {
+		return mathFunc(x, x)
+	}
+}
+
 func main() {
 	// ====== printing ========
 	fmt.Print("print in single line =========")
@@ -469,4 +489,34 @@ func main() {
 	// FIRST CLASS AND HIGHER ORDER FUNCTIONS -> callback function / function as data
 	// FIRST CLASS -> A programming language is said to have "first-class functions" when functions in that language are treated like any other variable.
 	// HIGHER ORDER FUNCTIONS -> A function that returns a function or accepts a function as input.
+	// func aggregate(a, b, c int, arithmetic func(int, int) int) int
+
+	fmt.Print("===== FIRST Class =======: ")
+	fmt.Println(maths(multiply, 3, 14))
+	fmt.Println(maths(substract, 3, 14))
+
+	/*
+		CURRYING
+		Function currying is a concept from functional programming and involves partial application of functions.
+		It allows a function with multiple arguments to be transformed into a sequence of functions, each taking a single argument.
+	*/
+	fmt.Println("===== CURRYING ========: ")
+	sqre := selfMath(multiply)
+	subs := selfMath(substract)
+	fmt.Println(sqre(4), subs(10))
+
+	/*
+		DEFER
+		The defer keyword is a fairly unique feature of Go. It allows a function to be executed automatically
+		just before its enclosing function returns.
+		The deferred call's arguments are evaluated immediately, but the function call is not executed until
+		the surrounding function returns.
+		Deferred functions are typically used to close database connections, file handlers and the like.
+	*/
+
+	/*
+		CLOSURES
+		A closure is a function that references variables from outside its own function body.
+		The function may access and assign to the referenced variables.
+	*/
 }
