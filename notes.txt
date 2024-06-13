@@ -38,7 +38,26 @@
 
 ========== packages & modules ==========
 packages = folder that has collection of file
+ ==
+  ONE PACKAGE / DIRECTORY
+     A directory of Go code can have at most one package. 
+     All .go files in a single directory must all belong to the same package. 
+     If they don't an error will be thrown by the compiler. This is true for main and library packages alike.
+==
 module = collection of packages(folder) (when creating project we are creating new module)
+==
+     Go programs are organized into packages. A package is a directory of Go code that's all compiled together.
+     Functions, types, variables, and constants defined in one source file are visible to all other source files
+     within the same package (directory).
+     A repository contains one or more modules. A module is a collection of Go packages that are released together.
+==
+==
+     A GO REPOSITORY TYPICALLY CONTAINS ONLY ONE MODULE, LOCATED AT THE ROOT OF THE REPOSITORY.
+     A file named go.mod at the root of a project declares the module. It contains:
+     1. The module path
+     2. The version of the Go language your project requires
+     3. Optionally, any external package dependencies your project has
+==
 
 ================= commands ===============
 1. go mod init {module name} ==== init a module file go.mod (start a go project)
@@ -47,3 +66,4 @@ module = collection of packages(folder) (when creating project we are creating n
 4. go mod tidy = adds any missing modules necessary to build the current module's packages and dependencies,
                 and it removes unused modules that don't provide any relevant packages
 5. go get {packages} = to install any package
+6. go build

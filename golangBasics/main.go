@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"learn/golang/package1"
 	"strconv"
 	"strings"
 )
@@ -204,6 +205,23 @@ func selfMath(mathFunc func(int, int) int) func(int) int {
 	return func(x int) int {
 		return mathFunc(x, x)
 	}
+}
+
+// ===== CLOSURES ========
+func concatination() func(string) string {
+	doc := ""
+	return func(s string) string {
+		doc += s
+		return doc
+	}
+}
+
+type car struct {
+	color string
+}
+
+func (c *car) setColor(color string) {
+	c.color = color
 }
 
 func main() {
@@ -519,4 +537,50 @@ func main() {
 		A closure is a function that references variables from outside its own function body.
 		The function may access and assign to the referenced variables.
 	*/
+
+	closure := concatination()
+	closure("WOrd 1 ")
+	closure("WOrd 2 ")
+	closure("WOrd 3 ")
+	closure("WOrd 4 ")
+	fmt.Println(closure("Word 5 "))
+	// 1. it can mutate a variable outside its body
+	// 2. It have mutable reference of original value
+
+	// ANONYMOUS FUNCTIONS
+	// Anonymous functions are true to form in that they have no name
+	// function which is received in function or return from closure
+
+	fmt.Println("====================== POINTER ===========================")
+	/*
+		a variable is a named location in memory that stores a value. We can manipulate the value of
+		a variable by assigning a new value to it or by performing operations on it.
+		When we assign a value to a variable, we are storing that value in a specific location in memory.
+	*/
+
+	x := 5
+	fmt.Println(&x) //  &return address of memory where data stored
+	y := &x         // assign address into new variable
+	fmt.Println(*y) // dereference (*) address value
+
+	// A pointer's zero value is nil
+	var ptr *int
+	fmt.Println(ptr)
+	// fmt.Println(*ptr) // dereferencing the nil/0 pointer cause panic in code
+
+	myString := "hello"
+	myStringPtr := &myString
+	fmt.Println(*myStringPtr) // read myString through the pointer
+	*myStringPtr = "world"    // set myString through the pointer
+	fmt.Println(*myStringPtr) // read myString through the pointer
+
+	// Pointer receiver
+	c := car{
+		color: "white",
+	}
+	c.setColor("blue")
+	fmt.Println(c.color)
+
+	// packages
+	package1.HandlePackage1()
 }
