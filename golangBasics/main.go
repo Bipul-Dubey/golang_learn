@@ -6,6 +6,8 @@ import (
 	"learn/golang/package1"
 	"strconv"
 	"strings"
+
+	"github.com/Bipul-Dubey/golang_learn/onlinePackage" // Import your external module
 )
 
 func sum(num1 int, num2 int) int {
@@ -583,4 +585,7 @@ func main() {
 
 	// packages
 	package1.HandlePackage1()
+
+	// online module package
+	onlinepackage.HandleOnlinePackage()
 }
