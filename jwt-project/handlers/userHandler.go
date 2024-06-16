@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/lib/pq"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // sign up function
@@ -25,15 +26,15 @@ func SignUp(c *gin.Context) {
 	var userID int
 
 	// Hash the password before storing it
-	// hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-	// if err != nil {
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
-	// 	return
-	// }
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
 
 	err = database.DB.QueryRow(
 		"INSERT INTO users (first_name, last_name, email, password, phone) VALUES ($1, $2, $3, $4, $5) RETURNING id",
-		req.FirstName, req.LastName, req.Email, req.Password, req.Phone,
+		req.FirstName, req.LastName, req.Email, hashedPassword, req.Phone,
 	).Scan(&userID)
 
 	if err != nil {
@@ -63,15 +64,15 @@ func Login(c *gin.Context) {
 	err := database.DB.QueryRow("SELECT id, first_name, last_name, password, email, phone FROM users WHERE email = $1", req.Email).Scan(
 		&user.ID, &user.FirstName, &user.LastName, &user.Password, &user.Email, &user.Phone)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password, try with valid email and password"})
 		return
 	}
 
 	// Compare the stored hashed password with the provided password
-	// if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
-	// 	c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
-	// 	return
-	// }
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid password"})
+		return
+	}
 
 	tokenString, err := GenerateToken(user)
 	if err != nil {
