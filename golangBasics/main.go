@@ -6,8 +6,9 @@ import (
 	"learn/golang/package1"
 	"strconv"
 	"strings"
+	"time"
 
-	"github.com/Bipul-Dubey/golang_learn/onlinePackage" // Import your external module
+	onlinepackage "github.com/Bipul-Dubey/golang_learn/onlinePackage" // Import your external module
 )
 
 func sum(num1 int, num2 int) int {
@@ -588,4 +589,47 @@ func main() {
 
 	// online module package
 	onlinepackage.HandleOnlinePackage()
+
+	// Concurrency - goroutine
+	/*
+		Concurrency is the ability to perform multiple tasks at the same time.
+		Typically, our code is executed one line at a time, one after the other.
+		This is called sequential execution or synchronous execution.
+	*/
+	go Concurrent()
+	fmt.Println("After concurrent")
+
+	/*
+		CHANNELS
+		Channels are a typed, thread-safe queue. Channels allow different goroutines to communicate with each other.
+		Like maps and slices, channels must be created before use. They also use the same make keyword:
+
+		ch := make(chan int)
+		- sending and receiving channel is blocking execution, if there is no sender or receiver then it block execution
+	*/
+	chnl := make(chan bool)
+	chnl = channelExample()
+	fmt.Println(chnl)
+}
+
+func Concurrent() {
+	time.Sleep(time.Millisecond * 250)
+	fmt.Println("inside concurrent func")
+}
+
+func channelExample() chan bool {
+	chn := make(chan bool)
+
+	list := []int{12, 3, 4, 5, 6, 7, 8, 9, 12, 13}
+	go func() {
+		for _, v := range list {
+			if v%2 == 0 {
+				chn <- false
+			} else {
+				chn <- true
+			}
+		}
+	}()
+
+	return chn
 }
